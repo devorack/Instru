@@ -8,9 +8,11 @@ R2 = 1000;
 C = 1e-6; % Capacitancia en faradios
 E = 1; % Voltaje en voltios
 Vc0 = 0; % Condición inicial para Vc(0)
+Ic0 = 0;
+Ic0_init = (R2*E - Vc0*(R2+Req))/( (R2*Req)+(Rm*Req)+ (Rm*R2));
 
 % Parámetros de la simulación
-frecuencia = 20;
+frecuencia = 66.66;
 periodo = 1/frecuencia;
 dt_cerrado = periodo/2; % Duración del circuito con señal escalón activa
 dt_abierto = periodo/2; % Duración del circuito con señal escalón inactiva
@@ -20,6 +22,7 @@ period_total = dt_cerrado + dt_abierto; % Periodo total
 n_intervals = 4; % Número total de intervalos
 
 results = [];
+results_ic = [];
 
 for i = 1:n_intervals
     % Determinar el tiempo de inicio y fin del intervalo
@@ -33,11 +36,19 @@ for i = 1:n_intervals
     % Resolver el sistema para el intervalo abierto
     [t_abierto, Vc_abierto] = ode23(@(t, Vc) ec_diff(t, Vc, R2, Req, Rm, E, C, -1), [t_end_cerrado, t_end_abierto], Vc_cerrado(end));
 
+    % Resolver el sistema para el intervalo cerrado
+    [t_cerrado_ic, Ic_cerrado] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, 1), [t_start, t_end_cerrado], Ic0+Ic0_init);
+
+    % Resolver el sistema para el intervalo abierto
+    [t_abierto_ic, Ic_abierto] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, -1), [t_end_cerrado, t_end_abierto], Ic_cerrado(end)- Ic0_init );
+
     % Almacenar resultados
     results = [results; [t_cerrado, Vc_cerrado; t_abierto, Vc_abierto]];
+    results_ic = [results_ic; [t_cerrado_ic, Ic_cerrado; t_abierto_ic, Ic_abierto]];
         
     % Actualizar el estado inicial para el próximo ciclo
     Vc0 = Vc_abierto(end); % La última solución se convierte en el nuevo estado inicial
+    Ic0 = Ic_abierto(end);
 end
 
 % Graficar la solución
@@ -46,4 +57,11 @@ plot(results(:, 1), results(:, 2), 'b');
 title('Voltaje en el Condensador Vc(t)');
 xlabel('Tiempo (s)');
 ylabel('Voltaje Vc(t) [V]');
+grid on;
+
+figure;
+plot(results_ic(:, 1), results_ic(:, 2), 'b');
+title('Corriente en el Condensador Ic(t)');
+xlabel('Tiempo (s)');
+ylabel('Corriente Ic(t) [V]');
 grid on;
