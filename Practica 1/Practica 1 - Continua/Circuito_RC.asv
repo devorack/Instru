@@ -9,11 +9,9 @@ C = 0.1e-6; % Capacitancia en faradios
 E = 1; % Voltaje en voltios
 Vc0 = 0; % Condición inicial para Vc(0)
 Ic0 = 0;
-
-EP =@(R2, Req, Rm, C, Vc0)(R2*E - Vc0*(R2+Req))/( (R2*Req)+(Rm*Req)+ (Rm*R2));
-Ic0_init = EP(R2, Req, Rm, C, Vc0);
-f_Ic_t = @(R2, Req, Rm, t, C, Ic0) exp(-(R2 + Req) * t / ((R2 * Req + R2 * Rm + Req * Rm) * C)) * Ic0;
-
+Ic0_init = (R2*E - Vc0*(R2+Req))/( (R2*Req)+(Rm*Req)+ (Rm*R2));
+f_Ic(t) = @(R2, Req, Rm, t, C, Ic0) exp(-(R2 + Req) * t / ((R2 * Req + R2 * Rm + Req * Rm) * C)) * Ic0;
+result = f_Ic(t)(1, 2, 3, 4, 5, 6);
 % Parámetros de la simulación
 frecuencia = 666.66;
 periodo = 1/frecuencia;
@@ -40,10 +38,10 @@ for i = 1:n_intervals
     [t_abierto, Vc_abierto] = ode23(@(t, Vc) ec_diff(t, Vc, R2, Req, Rm, E, C, -1), [t_end_cerrado, t_end_abierto], Vc_cerrado(end));
 
     % Resolver el sistema para el intervalo cerrado
-    [t_cerrado_ic, Ic_cerrado] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, 1), [t_start, t_end_cerrado], Ic0+EP(R2, Req, Rm, C, Vc0));
+    [t_cerrado_ic, Ic_cerrado] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, 1), [t_start, t_end_cerrado], Ic0+Ic0_init);
 
     % Resolver el sistema para el intervalo abierto
-    [t_abierto_ic, Ic_abierto] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, -1), [t_end_cerrado, t_end_abierto],Ic0-EP(R2, Req, Rm, C, Vc0));
+    [t_abierto_ic, Ic_abierto] = ode23(@(t, Ic) ec_diff_IL(t, Ic, R2, Req, Rm, E, C, -1), [t_end_cerrado, t_end_abierto], Ic_cerrado(end)- Ic0_init );
 
     % Almacenar resultados
     results = [results; [t_cerrado, Vc_cerrado; t_abierto, Vc_abierto]];
