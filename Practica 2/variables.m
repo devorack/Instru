@@ -1,0 +1,10 @@
+E=5;
+L = 2.37e-3;
+Rf = 50;
+Rml = 100;
+Rl = 0.8;
+Rc = 100;
+R = 10e3;
+C = 0.03e-6;
+frecuencia = 935.5;
+periodo = 1/frecuencia;
