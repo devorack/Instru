@@ -11,7 +11,7 @@ Rml = 100;
 Rl = 0.8;
 Rc = 100;
 R = 10e3;
-C = 0.03e-6;
+C = 0.3e-6;
 
 % Condiciones iniciales
 IL0 = E/(R+Rl+Rml+Rf);
@@ -80,9 +80,9 @@ title('Corriente Il_t');
 
 hold on;
 % Load Excel data
-archivo = csvread('../excels/sub-dis.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+%archivo = csvread('../excels/sub-dis.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
 %archivo = csvread('../excels/cri-dis.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
-%archivo = csvread('../excels/sob-dis.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+archivo = csvread('../excels/sob-dis.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
 tiempo = archivo(:, 1);
 data = archivo(:, 2);
 hold on;
@@ -102,9 +102,9 @@ title('Voltaje Vc_t');
 
 hold on;
 % Load Excel data
-archivo = csvread('../excels/sub.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+%archivo = csvread('../excels/sub.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
 %archivo = csvread('../excels/cri.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
-%archivo = csvread('../excels/sob.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+archivo = csvread('../excels/sob.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
 tiempo = archivo(:, 1);
 data = archivo(:, 2);
 

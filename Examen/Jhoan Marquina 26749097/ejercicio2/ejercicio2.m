@@ -4,7 +4,7 @@ close all;
 % Parámetros del circuito
 global R1 R2 E L C1 C2
 
-E=100;
+E=1000;
 L = 0.5;
 C1 = 2e-6;
 C2 = 1e-6;
@@ -18,7 +18,7 @@ dt_abierto = periodo/2; % Duración del circuito con señal escalón inactiva
 period_total = dt_cerrado + dt_abierto; % Periodo total
 
 % Tiempo total de simulación
-n_intervals = 6; % Número total de intervalos
+n_intervals = 4; % Número total de intervalos
 
 
 results_t = [];
