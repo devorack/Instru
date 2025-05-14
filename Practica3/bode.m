@@ -22,10 +22,8 @@ IL = tf([0 C*(R+Rc) 1],[(R+Rc)*L*C ((Rc+Rf+Rl+Rml)*R+Rc*(Rf+Rl+Rml))*C+L R+Rf+Rl
 VC = tf([0 0 R],[(R+Rc)*L*C ((Rc+Rf+Rl+Rml)*R+Rc*(Rf+Rl+Rml))*C+L R+Rf+Rl+Rml]);
 
 %Valores Inductor
-parteRealIL = (-0.009474758356*w.^2 + 10150.8)./(1.030387406*10^8 + 2.071032306*w.^2 + 2.123817199*10^(-10)*w.^4);
-
-parteImagIL = (63.95656373*w - 8.961254005*10^(-8)*w.^3)/(1.030387406*10^8 + 2.071032306*w.^2 + 2.123817199*10^(-10)*w.^4);
-
+parteRealIL = (-0.004676141482*w.^2 + 10150.8)./(1.030387406*10^8 + 0.4307395586*w.^2 + 5.156819721*10^(-11)*w.^4);
+parteImagIL =(63.17738639*w - 4.415716626*10^(-8)*w.^3)./(1.030387406*10^8 + 0.4307395586*w.^2 + 5.156819721*10^(-11)*w.^4);
 MagnitudIL = 20*log10(sqrt(parteRealIL.^2 + parteImagIL.^2));
 
 anguloFaseIL = atan(parteImagIL./parteRealIL)*(180/pi());
@@ -34,14 +32,13 @@ anguloFaseIL = atan(parteImagIL./parteRealIL)*(180/pi());
 
 %%
 %Valores Capacitor
-parteRealVC = (-0.1457332220*w.^2 + 1.015080000*10^8)./(1.030387406*10^8 + 2.071032306*w.^2 + 2.123817199*10^(-10)*w.^4);
-
-parteImagVC = 15384.71340*w ./(1.030387406*10^8 + 2.071032306*w.^2 + 2.123817199*10^(-10)*w.^4);
+parteRealVC =(-0.07181100000*w.^2 + 1.015080000*10^8)./(1.030387406*10^8 + 0.4307395586*w.^2 + 5.156819721*10^(-11)*w.^4);
+parteImagVC =7592.940000*w./(1.030387406*10^8 + 0.4307395586*w.^2 + 5.156819721*10^(-11)*w.^4);
 
 MagnitudVC = 20*log10(sqrt(parteRealVC.^2 + parteImagVC.^2));
 
 anguloFaseVC = atan(parteImagVC./parteRealVC)*(180/pi());
-omegan = 26391.91186;
+omegan = 37597.12603;
 
 % Definir la función phi
 phi = 180 * atan(parteImagVC ./ parteRealVC) / pi();
@@ -93,10 +90,10 @@ grid on;
 hold on
 bodemag(IL,opts);
 hold on
-plot((w/(2*pi)), MagnitudIL,'g');
+%plot((w/(2*pi)), MagnitudIL,'g');
 title('Diagrama Bode iL-Magnitud')
 xlabel('W')
-legend('Experimental','Matlab','Maple');
+legend('Experimental','Matlab');
 grid on;
 hold on
 
@@ -106,11 +103,11 @@ setoptions(k,'MagVisible','off');
 grid on;
 hold on
 plot(FRECU_IL, ANG_IL,'r');
-semilogx((w/(2*pi)), anguloFaseIL, 'g');
+%semilogx((w/(2*pi)), anguloFaseIL, 'g');
 hold off
 title('Diagrama Bode iL-Phase')
 xlabel('W')
-legend('Matlab','Experimental','Maple');
+legend('Matlab','Experimental');
 
 %%
 %%Graficas de Bode y Fases para Capacitor
@@ -122,7 +119,7 @@ title('Diagrama Bode VC-Magnitud');
 xlabel('W');
 grid on;
 hold on;
-plot((w/(2*pi)),MagnitudVC, 'g');
+%plot((w/(2*pi)),MagnitudVC, 'g');
 title('Diagrama Bode VC-Magnitud');
 xlabel('W');
 grid on;
@@ -130,7 +127,7 @@ hold on;
 bodemag(VC,opts);
 grid on;
 hold on;
-legend('Experimental','Maple', 'Matlab');
+legend('Experimental', 'Matlab');
 title('Diagrama Bode VC-Magnitud');
 xlabel('W');
 
@@ -140,8 +137,8 @@ setoptions(k1,'MagVisible','off');
 grid on;
 hold on
 plot(FRECU_VC, ANG_VC,'r');
-semilogx((w/(2*pi)), phi1, 'g');
+%semilogx((w/(2*pi)), phi1, 'g');
 hold off
 title('Diagrama Bode VC-Phase')
 xlabel('W')
-legend('Matlab','Experimental','Maple');
+legend('Matlab','Experimental');
