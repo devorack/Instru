@@ -1,0 +1,72 @@
+% Load Excel data
+archivoX1 = csvread('./Data/X1.csv', 0, 0);
+archivoX2 = csvread('./Data/X2.csv', 0, 0);
+archivoX3 = csvread('./Data/X3.csv', 0, 0);
+%archivo = csvread('../excels/cri.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+%archivo = csvread('../excels/sob.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
+timeX1 = archivoX1(:, 1);
+X1 = archivoX2(:, 2);
+
+timeX2 = archivoX1(:, 1);
+X2 = archivoX2(:, 2);
+
+timeX3 = archivoX1(:, 1);
+X3 = archivoX2(:, 2);
+
+%X2 = archivo(:, 2);
+%X3 = archivo(:, 3);
+
+
+
+% Extract Simulink data from table 'x1'
+simTime = subSimulink.time;
+simDataX1 = subSimulink.signals(1).values;
+simDataX2 = subSimulink.signals(1).values;
+simDataX3 = subSimulink.signals(1).values;
+
+
+
+
+
+figure(1);
+% % Plot Excel data
+%sub amortiguado
+
+
+subplot(3,1,1);
+plot(timeX1+1.2, X1, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX1,'r', 'DisplayName', 'Simulink Data');
+
+title('Gráfica 1');
+xlabel('Tiempo');
+ylabel('Valor');
+legend;
+hold off;
+
+
+subplot(3,1,2);
+plot(timeX2+1.2, X1, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX2,'r', 'DisplayName', 'Simulink Data');
+
+title('Gráfica 1');
+xlabel('Tiempo');
+ylabel('Valor');
+legend;
+hold off;
+
+
+subplot(3,1,3);
+plot(time+1.2, X1, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX3,'r', 'DisplayName', 'Simulink Data');
+
+title('Gráfica 1');
+xlabel('Tiempo');
+ylabel('Valor');
+legend;
+hold off;
+
+
+
