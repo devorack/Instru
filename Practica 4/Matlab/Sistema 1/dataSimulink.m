@@ -1,29 +1,90 @@
 % Load Excel data
-archivo = csvread('../excels/sub.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
-%archivo = csvread('../excels/cri.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
-%archivo = csvread('../excels/sob.csv', 18, 0); % Corrected to 'csvread' and file extension to '.csv'
-tiempo = archivo(:, 1);
-data = archivo(:, 2);
+archivoX1 = csvread('./Data/X1.csv', 0, 0);
+archivoX2 = csvread('./Data/X2.csv', 0, 0);
+archivoX3 = csvread('./Data/X3.csv', 0, 0);
+%comportamientos = csvread('./Data/Comportamientos.csv', 0, 0);
+timeX1 = archivoX1(:, 1);
+X1 = archivoX1(:, 2);
+
+timeX2 = archivoX2(:, 1);
+X2 = archivoX2(:, 2);
+
+timeX3 = archivoX3(:, 1);
+X3 = archivoX3(:, 2);
+
+%C_X1 = comportamientos(:, 1);
+%C_X2 = comportamientos(:, 2);
+%C_X3 = comportamientos(:, 3);
+
+
+N = length(C_X3);
+t = (0:N-1) /1430;
+
 
 % Extract Simulink data from table 'x1'
 simTime = subSimulink.time;
-simData = subSimulink.signals(1).values;
-figure;
-% % Plot Excel data
-%sub amortiguado
-plot(tiempo+0.549e-3, data, 'DisplayName', 'Excel Data');
-%sobre
-%plot(tiempo+0.6e-3, data, 'DisplayName', 'Excel Data');
-%critico
-%plot(tiempo+0.7e-3, data, 'DisplayName', 'Excel Data');
+simDataX1 = subSimulink.signals(1).values;
+simDataX2 = subSimulink.signals(2).values;
+simDataX3 = subSimulink.signals(3).values;
 
+
+
+
+
+figure(1);
+
+subplot(3,1,1);
+plot(timeX1-30, X1,'g', 'DisplayName', 'Excel Data');
 hold on;
+%plot(t-16, C_X1*12, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX1,'r', 'DisplayName', 'Simulink Data');
 
-% Plot Simulink data
-plot(simTime, simData,'r', 'DisplayName', 'Simulink Data');
-
-% Add labels and legend
-xlabel('Time');
-ylabel('Values');
+title('Gráfica X1');
+xlabel('Tiempo');
+ylabel('Valor');
 legend;
 hold off;
+
+
+subplot(3,1,2);
+plot(timeX2+26, X2,'g' ,'DisplayName', 'Excel Data');
+hold on
+%plot(t-16, C_X2, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX2,'r', 'DisplayName', 'Simulink Data');
+
+title('Gráfica X2');
+xlabel('Tiempo');
+ylabel('Valor');
+legend;
+hold off;
+
+
+subplot(3,1,3);
+plot(timeX3-33, X3,'g' ,'DisplayName', 'Excel Data');
+hold on
+%plot(t-16, C_X3, 'DisplayName', 'Excel Data');
+hold on;
+plot(simTime, simDataX3,'r', 'DisplayName', 'Simulink Data');
+
+title('Gráfica X3');
+xlabel('Tiempo');
+ylabel('Valor');
+legend;
+hold off;
+
+
+%idx = 1:210:length(X1);
+%figure(2);
+%plot3(C_X1(idx), C_X2(idx), C_X3(idx), 'LineWidth', 1.5);
+figure(2);
+plot3(X1, X2, X3, 'LineWidth', 1.5);
+xlabel('X1');
+ylabel('X2');
+zlabel('X3');
+title('Diagrama de Fase');
+grid on;
+
+
+

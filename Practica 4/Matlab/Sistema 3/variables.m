@@ -1,10 +1,8 @@
-E=0.6;
-frecuencia = 0.01091;
+E=0.91;
+frecuencia = 0.1222;
 periodo = 1/frecuencia;
 
-gananciaX1 = 8;
-gananciaX2 = 10;
-gananciaX3 = 6;
-
-
+gananciaX1 = 64;
+gananciaX2 = 48;
+gananciaX3 = 14;
 
