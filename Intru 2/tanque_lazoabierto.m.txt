@@ -1,0 +1,30 @@
+% simulacion_tanque.m
+
+% Parámetros
+A = 0.2;                     % Área del tanque en m²
+k = 0.5;                     % Constante de descarga
+h0 = 0;                      % Nivel inicial (m)
+
+% Flujo de entrada: 5.75 gpm a m^3/s
+Qin_const = 5.75;
+
+%Flujo constante para todo t
+Qin = @(t) Qin_const;           
+
+% Tiempo de simulación
+t_total = 150;              
+tspan = [0 t_total];
+
+% Definir función para ode45 usando función externa
+odefun = @(t, h) modelo_tanque(t, h, A, k, Qin);
+
+% Ejecutar simulación
+[t, h] = ode45(odefun, tspan, h0);
+
+% Graficar resultados
+figure;
+plot(t, h, 'b', 'LineWidth', 2);
+xlabel('Tiempo (s)');
+ylabel('Nivel del tanque (m)');
+title('Carga y descarga de un tanque (Q_{in} = 5.75 gpm)');
+grid on;

@@ -1,0 +1,12 @@
+function dhdt = modelo_tanque(t, h, A, k, Qin)
+    % Modelo dinámico del tanque
+    % t: tiempo actual
+    % h: altura actual del nivel del tanque
+    % A: área del tanque [m²]
+    % k: constante de descarga
+    % Qin: función de flujo de entrada (handle)
+
+    h = max(h, 0);  % para evitar raíces negativas
+    Qout = k * sqrt(h);
+    dhdt = (1 / A) * (Qin(t) - Qout);
+end

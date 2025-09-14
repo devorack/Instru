@@ -1,0 +1,29 @@
+global n a qi A 
+    a = 0.12899; %0.030809 0.03019
+    n = 0.23199; % 0.0951
+    A = 85.274; %Area transversal del tanque 92.90 85.27 89.99
+    qiGPM = 6;
+    qi = qiGPM*(3.85); %Flujo de entrada del tanque
+
+    h0 = 0;
+    tspan = [0 3000];
+
+[t,y]=ode23('tanque',tspan,h0);
+
+data1 = csvread('F0000CH1.csv'); data2 = csvread('F0001CH1.csv'); data3 = csvread('F0002CH1.csv'); 
+data4 = csvread('F0003CH1.csv'); data5 = csvread('F0004CH1.csv'); data6 = csvread('F0005CH1.csv');
+
+figure(1);
+plot(data1(:,4),(((data1(:,5))*6.272)+0.2299),'g'...
+    ,data2(:,4)+492.19,(((data2(:,5))*6.272)+0.2299),'g'...
+    ,data3(:,4)+959.2,(((data3(:,5))*6.272)+0.2299),'g'...
+    ,data4(:,4)+1442,(((data4(:,5))*6.272)+0.2299),'g'...
+    ,data5(:,4)+1916,(((data5(:,5))*6.272)+0.2299),'g'...
+    ,data6(:,4)+2388,(((data6(:,5))*6.272)+0.2299),'r'...
+    ,t,y,'b');
+grid on
+
+%DESCARGA
+% figure(2)
+% plot(data6(:,4)-47,(((data6(:,5))*6.272)+0.2299),'k');
+% grid on
