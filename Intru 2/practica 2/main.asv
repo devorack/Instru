@@ -1,0 +1,29 @@
+% Load Excel data
+archivo = csvread('DesplazamientoBastago.csv', 1, 0); 
+tiempo = archivo(:, 1);
+data = archivo(:, 2);
+
+plot(tiempo, data,'r', 'DisplayName', 'Simulink Data');
+
+
+global m c1 c2 c3 c4 Fs Fd Ad Kt R V u 
+
+%Servo-Valvula
+
+%Valores a ajustar
+c1 = 208000;
+c2 = 120000;
+c3 = 62800;
+c4 = 100; 
+
+%Tesis miguel pag 37
+R = 286.9;
+V = 0.00076;
+Kt = 0.9;
+m = 0.3;
+Ad = 0.026;
+Fs = 90;
+Fd = 420;
+
+
+u = 20684.3*4;
