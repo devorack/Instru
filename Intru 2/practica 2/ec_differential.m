@@ -11,11 +11,11 @@ function dy_dt = ec_differential(t,Y)
 
     % Flujo de entrada polinómico
     Qi = a3*Xv1^3 + a2*Xv1^2 + a1*Xv1 + a0;
-    disp(Qi*3.85);
+    disp(Qi);
   
 
     Qout = alpha * h^beta;
-    dh_dt = ((Qi*3.85)/Area - Qout);
+    dh_dt = (((Qi*3.85))/Area - Qout);
         
     dXv1_dt = Xv2;
     dXv2_dt = (1/m)*(-c2*Xv2-c4*(Xv1)^3-(c1-c3)*Xv1-Fs-Fd+Ad*Pd);

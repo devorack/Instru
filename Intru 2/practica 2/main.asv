@@ -5,13 +5,14 @@ clc;
     p2 = 0.03702;
 
 % Load Excel data
-%%archivo = csvread('./Data/TanqueAbierto.csv', 1, 0); 
-%%tiempoTanqueAbierto = archivo(:, 1);
-%%voltajeTanqueAbierto = archivo(:, 2);
-%%figure(2);
+archivo = csvread('./Data/TanqueAbierto.csv', 1, 0); 
+tiempoTanqueAbierto = archivo(:, 1);
+voltajeTanqueAbierto = archivo(:, 2);
+figure(2);
+subplot(4, 1, 4);
 
-%%plot(tiempoTanqueAbierto,((voltajeTanqueAbierto*p1) + p2)-1.1,'r');
-%%hold on;
+plot(tiempoTanqueAbierto,((voltajeTanqueAbierto*p1) + p2)-1.1,'r');
+hold on;
 
 archivo = csvread('./Data/DesplazamientoBastago.csv', 1, 0); 
 tiempo = archivo(:, 1);
@@ -32,19 +33,19 @@ X_F = flujoDesaplazamiento(:, 2);
 %plot(X_F, Q,'r');
 %hold on;
 
-global m c1 c2 c3 c4 Fs Fd Ad Kt R V u alpha beta Area a0 a1 a2 a3 a4
+global m c1 c2 c3 c4 Fs Fd Ad Kt R V u alpha beta Area a0 a1 a2 a3 Rref KpPI KiPI
 
+vref = 12;
 %tanque 
 Area = 85;   
-alpha = 0.140099;%0.1219;
-beta = 0.22;%0.2191;
+alpha = 0.1157;%0.1219;
+beta = 0.21599;%0.2191;
 
  % Coeficientes del polinomio de flujo (ajustados)
-    a4 =   -1.0883e+09;
-    a3 = 4.4220e+07;    
-    a2 = -6.2841e+05; 
-    a1 = 4.3111e+03; 
-    a0 = -8.2716;
+    a3 = 7.5315e+06;    
+    a2 = -1.1586e+05; 
+    a1 = 950.5064; 
+    a0 = 0.0108;
 
 %Servo-Valvula
 
@@ -64,13 +65,13 @@ beta = 0.22;%0.2191;
     Fd = 420;
 
     %Dato medido
-    u = 14*6894.75729;%96526.6;%20684.3*14; %factor de conversion por PSI medido
+    u = 11*6894.75729;%96526.6;%20684.3*14; %factor de conversion por PSI medido
 
 %Pd sale de la presion atm en unidades de pascal
-Y0 = [0; 0; 81060;0.1];
+Y0 = [0; 0; 81060;0.1;0];
 results_t = [];
 
-[t, x] = ode23s(@(t, Y) ec_differential(t,Y), [0, 6500], Y0);
+[t, x] = ode23s(@(t, Y) ec_differential_lazo_cerrado(t,Y), [0, 21000], Y0);
 
 
 figure(1);
@@ -93,7 +94,8 @@ xlabel('Tiempo');
 ylabel('Presion');
 title('Presion vastago');
 
-subplot(4, 1, 4);
+figure(6);
+
 plot(t, x(:,4),'g');
 xlabel('Tiempo');
 ylabel('Altura (h)');

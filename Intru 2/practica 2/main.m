@@ -1,17 +1,19 @@
 close all
 clear;
 clc;
-    p1 = 6.236;
-    p2 = 0.03702;
+
+p1 = 6.236;
+p2 = 0.03702;
 
 % Load Excel data
-%%archivo = csvread('./Data/TanqueAbierto.csv', 1, 0); 
-%%tiempoTanqueAbierto = archivo(:, 1);
-%%voltajeTanqueAbierto = archivo(:, 2);
-%%figure(2);
+%archivo = csvread('./Data/TanqueAbierto.csv', 1, 0); 
+%tiempoTanqueAbierto = archivo(:, 1);
+%voltajeTanqueAbierto = archivo(:, 2);
+%figure(2);
+%subplot(4, 1, 4);
 
-%%plot(tiempoTanqueAbierto,((voltajeTanqueAbierto*p1) + p2)-1.1,'r');
-%%hold on;
+%plot(tiempoTanqueAbierto,((voltajeTanqueAbierto*p1) + p2)-1.1,'r');
+%hold on;
 
 archivo = csvread('./Data/DesplazamientoBastago.csv', 1, 0); 
 tiempo = archivo(:, 1);
@@ -32,18 +34,22 @@ X_F = flujoDesaplazamiento(:, 2);
 %plot(X_F, Q,'r');
 %hold on;
 
-global m c1 c2 c3 c4 Fs Fd Ad Kt R V u alpha beta Area a0 a1 a2 a3 a4
+global m c1 c2 c3 c4 Fs Fd Ad Kt R V u alpha beta Area a0 a1 a2 a3 Rref KpPI KiPI
 
-%tanque 
-Area = 85;   
-alpha = 0.140099;%0.1219;
-beta = 0.22449;%0.2191;
+KpPI = 2538.48754509103;   % Ganancia proporcional (valor de ejemplo)
+KiPI = 249.20998314365;    % Ganancia integral (valor de ejemplo)
+Rref = 25;  % en cm
+
+ %tanque 
+    Area = 85;   
+    alpha = 0.1157;%0.1219;
+    beta = 0.21599;%0.2191;
 
  % Coeficientes del polinomio de flujo (ajustados)
-    a3 = -1.8631e+06;    
-    a2 = 4.3737e+04; 
-    a1 = 302.6482; 
-    a0 = 0.3841;
+    a3 = 7.5315e+06;    
+    a2 = -1.1586e+05; 
+    a1 = 950.5064; 
+    a0 = 0.0108;
 
 %Servo-Valvula
 
@@ -63,17 +69,22 @@ beta = 0.22449;%0.2191;
     Fd = 420;
 
     %Dato medido
-    u = 14*6894.75729;%96526.6;%20684.3*14; %factor de conversion por PSI medido
+    u = 11*6894.75729;%96526.6;%20684.3*14; %factor de conversion por PSI medido
 
 %Pd sale de la presion atm en unidades de pascal
-Y0 = [0; 0; 81060;0.1];
+Y0 = [0; 0; 81060;0.1;0];
 results_t = [];
 
-[t, x] = ode23s(@(t, Y) ec_differential(t,Y), [0, 2500], Y0);
+
+CondI = [0   0   81060   0.1   0];  % x(5)=0 es la condición inicial del integrador
+tspan = [0 2000];
+
+options = odeset('RelTol', 1e-2, 'AbsTol', 1e-4);
+[t, x] = ode23s('ec_differential_lazo_cerrado', tspan, CondI, options);
+%[t, x] = ode23s(@(t, Y) ec_differential_lazo_cerrado(t,Y), [0, 21000], Y0);
 
 
 figure(1);
-% Subgráfica para Il_t
 subplot(4, 1, 1);
 plot(t, x(:,1));
 xlabel('Tiempo');

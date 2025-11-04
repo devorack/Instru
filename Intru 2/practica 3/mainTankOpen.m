@@ -15,10 +15,10 @@ hold on;
 
 
 global n a qi A 
-a = 0.1257; %0.1199;
-n =0.21599;
+a = 0.1219; %0.1199;
+n =0.2191;
 A = 85; %Area transversal del tanque 92.90 85.27 89.99
-qiGPM = 7.5;
+qiGPM = 5.25;
 qi = qiGPM*(3.85); %Flujo de entrada del tanque
 h0 = 0;
 tspan = [0 6800];
